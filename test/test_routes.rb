@@ -21,14 +21,14 @@ class RoutesTest < Test::Unit::TestCase
     @routes.add(:get, '/bar', {}, &@action)
 
     @routes.match(:get, '/bar').should_not  be(nil)
-    @routes.match(:get, '/bar').path.should be('/bar')
+    @routes.match(:get, '/bar').first.path.should be('/bar')
   end
 
   test "returns nil when no route matches" do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match('/baz', :get).should be(nil)
+    @routes.match('/baz', :get).should be([nil,nil])
   end
 
   ## engine

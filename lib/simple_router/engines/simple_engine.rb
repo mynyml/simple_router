@@ -12,7 +12,7 @@ module SimpleRouter
       # Array of two elements:
       #
       # * index 0: first matching route
-      # * index 1: array of values for route variables, in the order they were specified
+      # * index 1: array of values for the route's variables (in the order they were specified in the route)
       #
       # ===== Examples
       #
@@ -21,9 +21,9 @@ module SimpleRouter
       #
       def self.match(path, routes)
         routes.each do |route|
-          return route if route == path
+          return [route, nil] if route == path
         end
-        nil
+        [nil, nil]
       end
     end
   end

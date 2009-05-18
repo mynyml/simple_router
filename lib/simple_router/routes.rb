@@ -13,16 +13,20 @@ module SimpleRouter
     end
 
     def match(verb, path)
-      unless self.empty?
-        routes = self.select {|route| route.verb == verb }
-        paths  = routes.map  {|route| route.path }
+      none = [nil, nil]
+      return none if self.empty?
 
-        path = self.engine.match(path, paths)
-        routes.detect {|route| route.path == path }
-      end
+      routes = self.select {|route| route.verb == verb }
+      paths  = routes.map  {|route| route.path }
+
+      path, vars = self.engine.match(path, paths)
+      return none if path.nil?
+
+      route = routes.detect {|route| route.path == path }
+      [route, vars]
     end
 
-    class Route < Array #:nodoc:
+    class Route #:nodoc:
       attr_accessor :verb,:path,:options,:action
 
       def initialize(verb, path, options, &action)
