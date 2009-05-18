@@ -1,5 +1,5 @@
 module SimpleRouter
-  class Routes < Array #:nodoc:
+  class Routes < Array
 
     # routing engine
     attr_accessor :engine
@@ -26,7 +26,7 @@ module SimpleRouter
       [route, vars]
     end
 
-    class Route #:nodoc:
+    class Route
       attr_accessor :verb,:path,:options,:action
 
       def initialize(verb, path, options, &action)
