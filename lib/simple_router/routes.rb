@@ -1,13 +1,6 @@
 module SimpleRouter
   class Routes < Array
 
-    # routing engine
-    attr_accessor :engine
-
-    def engine
-      @engine || Engines::SimpleEngine
-    end
-
     def add(*args, &action)
       self << Route.new(*args, &action)
     end
@@ -21,7 +14,7 @@ module SimpleRouter
       routes = self.select {|route| route.verb == verb }
       paths  = routes.map  {|route| route.path }
 
-      path, vars = self.engine.match(path, paths)
+      path, vars = SimpleRouter.engine.match(path, paths)
       return none if path.nil?
 
       route = routes.detect {|route| route.path == path }

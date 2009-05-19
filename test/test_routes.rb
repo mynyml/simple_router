@@ -39,17 +39,6 @@ class RoutesTest < Test::Unit::TestCase
     @routes.match('GET',  '/bar').first.path.should be('/bar')
     @routes.match(' GET ','/bar').first.path.should be('/bar')
   end
-
-  ## engine
-
-  test "default engine" do
-    @routes.engine.name.split('::').last.should be('SimpleEngine')
-  end
-
-  test "custom engine" do
-    @routes.engine = ::Object
-    @routes.engine.name.should be('Object')
-  end
 end
 
 class RouteTest < Test::Unit::TestCase
