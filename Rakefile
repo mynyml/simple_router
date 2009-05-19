@@ -23,8 +23,8 @@ end
 spec = Gem::Specification.new do |s|
   s.name            = 'simple_router'
   s.version         = '0.8'
-  s.summary         = "Minimalistic, simple router meant to be used with pure rack applications."
-  s.description     = "Minimalistic, simple router meant to be used with pure rack applications."
+  s.summary         = "Simple, minimalistic router meant to be used with pure rack applications."
+  s.description     = "Simple, minimalistic router meant to be used with pure rack applications."
   s.author          = "Martin Aumont"
   s.email           = 'mynyml@gmail.com'
   s.homepage        = ''

@@ -31,6 +31,15 @@ class RoutesTest < Test::Unit::TestCase
     @routes.match('/baz', :get).should be([nil,nil])
   end
 
+  test "normalizes passed in verb string" do
+    @routes.add(:get, '/foo', {}, &@action)
+    @routes.add(:get, '/bar', {}, &@action)
+
+    @routes.match('get',  '/bar').first.path.should be('/bar')
+    @routes.match('GET',  '/bar').first.path.should be('/bar')
+    @routes.match(' GET ','/bar').first.path.should be('/bar')
+  end
+
   ## engine
 
   test "default engine" do

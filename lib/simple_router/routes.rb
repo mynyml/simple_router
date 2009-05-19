@@ -16,6 +16,8 @@ module SimpleRouter
       none = [nil, nil]
       return none if self.empty?
 
+      verb = verb.to_s.downcase.strip.to_sym
+
       routes = self.select {|route| route.verb == verb }
       paths  = routes.map  {|route| route.path }
 
