@@ -34,7 +34,6 @@ files:
 - examples/rack_app.ru
 - simple_router.gemspec
 - TODO
-- WIKI.txt
 - lib
 - lib/simple_router
 - lib/simple_router/routes.rb
