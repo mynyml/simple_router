@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: simple_router
 version: !ruby/object:Gem::Version 
-  version: "0.8"
+  version: 0.8.1
 platform: ruby
 authors: 
 - Martin Aumont
@@ -9,11 +9,11 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2009-05-18 00:00:00 -04:00
+date: 2009-05-19 00:00:00 -04:00
 default_executable: 
 dependencies: []
 
-description: Minimalistic, simple router meant to be used with pure rack applications.
+description: Simple, minimalistic, standalone router meant to be used with pure rack applications.
 email: mynyml@gmail.com
 executables: []
 
@@ -34,6 +34,7 @@ files:
 - examples/rack_app.ru
 - simple_router.gemspec
 - TODO
+- WIKI.txt
 - lib
 - lib/simple_router
 - lib/simple_router/routes.rb
@@ -71,6 +72,6 @@ rubyforge_project:
 rubygems_version: 1.3.3
 signing_key: 
 specification_version: 3
-summary: Minimalistic, simple router meant to be used with pure rack applications.
+summary: Simple, minimalistic, standalone router meant to be used with pure rack applications.
 test_files: []
 
