@@ -1,36 +1,126 @@
 require 'test/test_helper'
 
-Engine = SimpleRouter::Engines::SimpleEngine
-
 class SimpleEngineTest < Test::Unit::TestCase
+  include SimpleRouter::Engines::SimpleEngine
 
   test "matches static paths" do
-    Engine.match('/',    ['/', '/foo']).first.should be('/')
-    Engine.match('/foo', ['/', '/foo']).first.should be('/foo')
-    Engine.match('/bar', ['/', '/foo']).first.should be(nil)
+    Base.match('/',    ['/', '/foo']).first.should be('/')
+    Base.match('/foo', ['/', '/foo']).first.should be('/foo')
+    Base.match('/bar', ['/', '/foo']).first.should be(nil)
   end
 
   test "matches variable paths" do
-    path, vars = Engine.match('/80/07', ['/foo', '/:year/:month'])
+    path, vars = Base.match('/80/07', ['/foo', '/:year/:month'])
     path.should be('/:year/:month')
     vars.should be(['80','07'])
   end
 
   test "matches hybrid paths" do
-    path, vars = Engine.match('/archives/80/07', ['/foo', '/archives/:year/:month'])
+    path, vars = Base.match('/archives/80/07', ['/foo', '/archives/:year/:month'])
     path.should be('/archives/:year/:month')
     vars.should be(['80','07'])
   end
 
   test "ignores leading slash in path" do
-    path, vars = Engine.match('archives/80/07', ['/foo', '/archives/:year/:month'])
+    path, vars = Base.match('archives/80/07', ['/foo', '/archives/:year/:month'])
     path.should be('/archives/:year/:month')
     vars.should be(['80','07'])
   end
 
   test "no matches" do
-    path, vars = Engine.match('/80/07/01', ['/foo', '/:year/:month'])
+    path, vars = Base.match('/80/07/01', ['/foo', '/:year/:month'])
     path.should be(nil)
     vars.should be([])
+  end
+
+  test "treats extention as pattern part" do
+    path, vars = Base.match('/a/b.xml', ['/:foo/:bar', '/:foo/:bar.:type'])
+    path.should be('/:foo/:bar.:type')
+    vars.should be(['a','b','xml'])
+  end
+end
+
+class PatternTest < Test::Unit::TestCase
+  include SimpleRouter::Engines::SimpleEngine
+
+  test "static pattern matches a path" do
+    path    = Path.new('/foo/bar')
+    pattern = Pattern.new('/foo/bar')
+
+    assert pattern == path
+  end
+
+  test "variable pattern matches a path" do
+    path    = Path.new('/foo/bar')
+    pattern = Pattern.new('/:foo/:bar')
+
+    assert pattern == path
+  end
+
+  test "pattern variables" do
+    path    = Path.new('/foo/bar/baz')
+    pattern = Pattern.new('/:a/:b/:c')
+
+    assert pattern == path
+    pattern.vars.should be(%w( foo bar baz ))
+  end
+
+  test "pattern variables with extention" do
+    path    = Path.new('/foo/bar/baz.xml')
+    pattern = Pattern.new('/:a/:b/:c.:type')
+
+    assert pattern == path
+    pattern.vars.should be(%w( foo bar baz xml ))
+  end
+
+  test "variable pattern matches a path with static extention" do
+    path    = Path.new('/foo/bar.xml')
+    pattern = Pattern.new('/:foo/:bar.xml')
+
+    assert pattern == path
+  end
+
+  test "variable pattern matches a path with variable extention" do
+    path    = Path.new('/foo/bar.xml')
+    pattern = Pattern.new('/:foo/:bar.:type')
+
+    assert pattern == path
+  end
+
+  test "pattern without extention doesn't match path with extention" do
+    path    = Path.new('/foo/bar.xml')
+    pattern = Pattern.new('/:foo/:bar')
+
+    assert pattern != path
+  end
+
+  test "pattern with static extention doesn't match path without extention" do
+    path    = Path.new('/foo/bar')
+    pattern = Pattern.new('/:foo/:bar.xml')
+
+    assert pattern != path
+  end
+
+  test "pattern with variable extention doesn't match path without extention" do
+    path    = Path.new('/foo/bar')
+    pattern = Pattern.new('/:foo/:bar.:type')
+
+    assert pattern != path
+  end
+
+  test "doesn't ignore dots in path parts" do
+    path    = Path.new('/foo/bar.baz/abc')
+    pattern = Pattern.new('/:a/:b/:c')
+
+    assert pattern == path
+    pattern.variables.should be(%w( foo bar.baz abc ))
+  end
+
+  test "doesn't get confused with extention when path contains other dots" do
+    path    = Path.new('/foo/bar.baz/abc.xml')
+    pattern = Pattern.new('/:a/:b/:c.:type')
+
+    assert pattern == path
+    pattern.variables.should be(%w( foo bar.baz abc xml ))
   end
 end
