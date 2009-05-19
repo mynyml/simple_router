@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: simple_router
 version: !ruby/object:Gem::Version 
-  version: "0.1"
+  version: "0.8"
 platform: ruby
 authors: 
 - Martin Aumont
@@ -30,6 +30,8 @@ files:
 - test/test_dsl.rb
 - test/test_routes.rb
 - test/test_helper.rb
+- examples
+- examples/rack_app.ru
 - simple_router.gemspec
 - TODO
 - lib
