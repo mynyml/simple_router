@@ -30,7 +30,7 @@ spec = Gem::Specification.new do |s|
   s.homepage        = ''
   s.has_rdoc        = true
   s.require_path    = "lib"
-  s.files           = all_except(/doc\/.*/)
+  s.files           = all_except([/doc\/.*/, /pkg\/*/])
 end
 
 Rake::GemPackageTask.new(spec) do |p|
