@@ -64,7 +64,7 @@ This allows, for instance, a new faster engine to be used by an app without
 changes in the top level DSL.
 
 Engines can also allow route definitions to include more (or less!) features.
-For example, the built-in SimpleEngine allows route variables and extention
+For example, the built-in SimpleEngine allows route variables and extension
 handling. Others could add variable conditions ( :id => Integer ), mime-type
 restrictions, etc.
 

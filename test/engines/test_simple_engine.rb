@@ -33,7 +33,7 @@ class SimpleEngineTest < Test::Unit::TestCase
     vars.should be([])
   end
 
-  test "treats extention as pattern part" do
+  test "treats extension as pattern part" do
     path, vars = Base.match('/a/b.xml', ['/:foo/:bar', '/:foo/:bar.:type'])
     path.should be('/:foo/:bar.:type')
     vars.should be(['a','b','xml'])
@@ -65,7 +65,7 @@ class PatternTest < Test::Unit::TestCase
     pattern.vars.should be(%w( foo bar baz ))
   end
 
-  test "pattern variables with extention" do
+  test "pattern variables with extension" do
     path    = Path.new('/foo/bar/baz.xml')
     pattern = Pattern.new('/:a/:b/:c.:type')
 
@@ -73,35 +73,35 @@ class PatternTest < Test::Unit::TestCase
     pattern.vars.should be(%w( foo bar baz xml ))
   end
 
-  test "variable pattern matches a path with static extention" do
+  test "variable pattern matches a path with static extension" do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar.xml')
 
     assert pattern == path
   end
 
-  test "variable pattern matches a path with variable extention" do
+  test "variable pattern matches a path with variable extension" do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar.:type')
 
     assert pattern == path
   end
 
-  test "pattern without extention doesn't match path with extention" do
+  test "pattern without extension doesn't match path with extension" do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar')
 
     assert pattern != path
   end
 
-  test "pattern with static extention doesn't match path without extention" do
+  test "pattern with static extension doesn't match path without extension" do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/:foo/:bar.xml')
 
     assert pattern != path
   end
 
-  test "pattern with variable extention doesn't match path without extention" do
+  test "pattern with variable extension doesn't match path without extension" do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/:foo/:bar.:type')
 
@@ -116,7 +116,7 @@ class PatternTest < Test::Unit::TestCase
     pattern.variables.should be(%w( foo bar.baz abc ))
   end
 
-  test "doesn't get confused with extention when path contains other dots" do
+  test "doesn't get confused with extension when path contains other dots" do
     path    = Path.new('/foo/bar.baz/abc.xml')
     pattern = Pattern.new('/:a/:b/:c.:type')
 
