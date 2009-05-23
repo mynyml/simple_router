@@ -22,10 +22,10 @@ class App
 
   def call(env)
     verb, path  = ENV['REQUEST_METHOD'], ENV['PATH_INFO']
-    route, args = self.class.routes.match(verb, path)
+    route = self.class.routes.match(verb, path)
     route.nil? ?
       [404, {'Content-Type' => 'text/html'}, '404 page not found'] :
-      [200, {'Content-Type' => 'text/html'}, route.action.call(*args)]
+      [200, {'Content-Type' => 'text/html'}, route.action.call(*route.values)]
   end
 end
 
@@ -46,6 +46,7 @@ example above:
   route.verb    = :get
   route.path    = '/archives/:year/:month/:day'
   route.action  = lambda {|year, month, day| Article.archived.find_by_date(year, month, day) }
+  route.values  = ['2008', '07', '01'] # after being matched with path '/archives/2008/07/01'
 
 See examples/ directory for executable code examples.
 

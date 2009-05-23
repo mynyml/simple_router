@@ -6,29 +6,30 @@ module SimpleRouter
     end
 
     def match(verb, path)
-      none = [nil, nil]
-      return none if self.empty?
+      return nil if self.empty?
 
       verb = verb.to_s.downcase.strip.to_sym
 
       routes = self.select {|route| route.verb == verb }
       paths  = routes.map  {|route| route.path }
 
-      path, vars = SimpleRouter.engine.match(path, paths)
-      return none if path.nil?
+      path, values = SimpleRouter.engine.match(path, paths)
+      return nil if path.nil?
 
       route = routes.detect {|route| route.path == path }
-      [route, vars]
+      route.values = values
+      route
     end
 
     class Route
-      attr_accessor :verb,:path,:options,:action
+      attr_accessor :verb,:path,:options,:action, :values
 
       def initialize(verb, path, options, &action)
         self.verb    = verb
         self.path    = path
         self.options = options
         self.action  = action
+        self.values  = nil
       end
     end
   end

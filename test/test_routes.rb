@@ -21,23 +21,23 @@ class RoutesTest < Test::Unit::TestCase
     @routes.add(:get, '/bar', {}, &@action)
 
     @routes.match(:get, '/bar').should_not  be(nil)
-    @routes.match(:get, '/bar').first.path.should be('/bar')
+    @routes.match(:get, '/bar').path.should be('/bar')
   end
 
   test "returns nil when no route matches" do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match('/baz', :get).should be([nil,nil])
+    @routes.match('/baz', :get).should be(nil)
   end
 
   test "normalizes passed in verb string" do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match('get',  '/bar').first.path.should be('/bar')
-    @routes.match('GET',  '/bar').first.path.should be('/bar')
-    @routes.match(' GET ','/bar').first.path.should be('/bar')
+    @routes.match('get',  '/bar').path.should be('/bar')
+    @routes.match('GET',  '/bar').path.should be('/bar')
+    @routes.match(' GET ','/bar').path.should be('/bar')
   end
 end
 
@@ -51,5 +51,6 @@ class RouteTest < Test::Unit::TestCase
     route.path    .should be(path)
     route.options .should be(options)
     route.action  .should be(action)
+    route.values  .should be(nil)
   end
 end

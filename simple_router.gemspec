@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: simple_router
 version: !ruby/object:Gem::Version 
-  version: 0.8.1
+  version: "0.9"
 platform: ruby
 authors: 
 - Martin Aumont
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2009-05-19 00:00:00 -04:00
+date: 2009-05-23 00:00:00 -04:00
 default_executable: 
 dependencies: []
 
