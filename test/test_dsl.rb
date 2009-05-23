@@ -33,6 +33,6 @@ class DslTest < Test::Unit::TestCase
     App.get('/bar') { 'bar' }
 
     App.routes.match(:get, '/foo').should_not  be( nil )
-    App.routes.match(:get, '/foo').first.action.call.should be('foo')
+    App.routes.match(:get, '/foo').action.call.should be('foo')
   end
 end

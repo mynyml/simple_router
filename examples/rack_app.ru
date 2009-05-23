@@ -35,10 +35,10 @@ class App
     verb = request.request_method.downcase.to_sym
     path = Rack::Utils.unescape(request.path_info)
 
-    route, args = self.class.routes.match(verb, path)
+    route = self.class.routes.match(verb, path)
     route.nil? ?
       [404, {'Content-Type' => 'text/html'}, '404 page not found'] :
-      [200, {'Content-Type' => 'text/html'}, [route.action.call(*args.push(request.params))]]
+      [200, {'Content-Type' => 'text/html'}, [route.action.call(*route.values.push(request.params))]]
   end
 end
 
