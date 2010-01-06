@@ -4,7 +4,6 @@ Manifest
 README.md
 Rakefile
 TODO
-doc/.gitignore
 examples/rack_app.ru
 lib/simple_router.rb
 lib/simple_router/dsl.rb
