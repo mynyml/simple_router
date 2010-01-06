@@ -1,21 +1,17 @@
 require 'pathname'
-require 'test/unit'
-require 'rubygems'
-require 'matchy'
-require 'pending'
+require 'nanotest'
+require 'nanotest/spec'
+require 'nanotest/contexts'
 begin
   require 'ruby-debug'
+  require 'redgreen'        # gem install mynyml-redgreen
+  require 'nanotest/stats'
+  require 'nanotest/focus'
 rescue LoadError, RuntimeError
 end
 
-root = Pathname(__FILE__).dirname.parent.expand_path
-$:.unshift(root.join('lib'))
-
+$:.unshift Pathname(__FILE__).dirname.parent + 'lib' 
 require 'simple_router'
 
-class Test::Unit::TestCase
-  def self.test(name, &block)
-    name = :"test_#{name.gsub(/\s/,'_')}"
-    define_method(name, &block)
-  end
-end
+include Nanotest
+include Nanotest::Contexts

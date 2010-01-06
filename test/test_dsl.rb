@@ -4,35 +4,42 @@ class App
   include SimpleRouter::DSL
 end
 
-class DslTest < Test::Unit::TestCase
+context do
 
-  def setup
+  setup do
+    SimpleRouter.engine = SimpleRouter::Engines::SimpleEngine
+  end
+
+  teardown do
     App.routes.clear
   end
 
   ## API
 
-  test "provides action verb methods" do
+  # provides action verb methods 
+  test do
     App.get(   '/foo') {}
     App.post(  '/foo') {}
     App.put(   '/foo') {}
     App.delete('/foo') {}
 
-    App.routes.size.should be(4)
+    App.routes.size.must == 4
   end
 
-  test "provides routes object" do
-    App.respond_to?(:routes).should be(true)
-    App.routes.should be_kind_of(SimpleRouter::Routes)
+  # provides routes object 
+  test do
+    App.respond_to?(:routes).must == true
+    App.routes.must.kind_of?(SimpleRouter::Routes)
   end
 
   ## matching
 
-  test "matching routes" do
+  # matching routes 
+  test do
     App.get('/foo') { 'foo' }
     App.get('/bar') { 'bar' }
 
-    App.routes.match(:get, '/foo').should_not  be( nil )
-    App.routes.match(:get, '/foo').action.call.should be('foo')
+    App.routes.match(:get, '/foo').wont == nil
+    App.routes.match(:get, '/foo').action.call.must == 'foo'
   end
 end

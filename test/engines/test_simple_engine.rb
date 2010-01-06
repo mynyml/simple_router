@@ -1,126 +1,145 @@
 require 'test/test_helper'
 
-class SimpleEngineTest < Test::Unit::TestCase
+## SimpleEngine
+context do
   include SimpleRouter::Engines::SimpleEngine
 
-  test "matches static paths" do
-    Base.match('/',    ['/', '/foo']).first.should be('/')
-    Base.match('/foo', ['/', '/foo']).first.should be('/foo')
-    Base.match('/bar', ['/', '/foo']).first.should be(nil)
+  # matches static paths 
+  test do
+    Base.match('/',    ['/', '/foo']).first.must == '/'
+    Base.match('/foo', ['/', '/foo']).first.must == '/foo'
+    Base.match('/bar', ['/', '/foo']).first.must == nil
   end
 
-  test "matches variable paths" do
+  # matches variable paths 
+  test do
     path, vars = Base.match('/80/07', ['/foo', '/:year/:month'])
-    path.should be('/:year/:month')
-    vars.should be(['80','07'])
+    path.must == '/:year/:month'
+    vars.must == ['80','07']
   end
 
-  test "matches hybrid paths" do
+  # matches hybrid paths 
+  test do
     path, vars = Base.match('/archives/80/07', ['/foo', '/archives/:year/:month'])
-    path.should be('/archives/:year/:month')
-    vars.should be(['80','07'])
+    path.must == '/archives/:year/:month'
+    vars.must == ['80','07']
   end
 
-  test "ignores leading slash in path" do
+  # ignores leading slash in path 
+  test do
     path, vars = Base.match('archives/80/07', ['/foo', '/archives/:year/:month'])
-    path.should be('/archives/:year/:month')
-    vars.should be(['80','07'])
+    path.must == '/archives/:year/:month'
+    vars.must == ['80','07']
   end
 
-  test "no matches" do
+  # no matches 
+  test do
     path, vars = Base.match('/80/07/01', ['/foo', '/:year/:month'])
-    path.should be(nil)
-    vars.should be([])
+    path.must == nil
+    vars.must == []
   end
 
-  test "treats extension as pattern part" do
+  # treats extension as pattern part 
+  test do
     path, vars = Base.match('/a/b.xml', ['/:foo/:bar', '/:foo/:bar.:type'])
-    path.should be('/:foo/:bar.:type')
-    vars.should be(['a','b','xml'])
+    path.must == '/:foo/:bar.:type'
+    vars.must == ['a','b','xml']
   end
 end
 
-class PatternTest < Test::Unit::TestCase
+## Pattern
+context do
   include SimpleRouter::Engines::SimpleEngine
 
-  test "static pattern matches a path" do
+  # static pattern matches a path 
+  test do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/foo/bar')
 
-    assert pattern == path
+    assert { pattern == path }
   end
 
-  test "variable pattern matches a path" do
+  # variable pattern matches a path 
+  test do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/:foo/:bar')
 
-    assert pattern == path
+    assert { pattern == path }
   end
 
-  test "pattern variables" do
+  # pattern variables 
+  test do
     path    = Path.new('/foo/bar/baz')
     pattern = Pattern.new('/:a/:b/:c')
 
-    assert pattern == path
-    pattern.vars.should be(%w( foo bar baz ))
+    assert { pattern == path }
+    pattern.vars.must == %w( foo bar baz )
   end
 
-  test "pattern variables with extension" do
+  # pattern variables with extension 
+  test do
     path    = Path.new('/foo/bar/baz.xml')
     pattern = Pattern.new('/:a/:b/:c.:type')
 
-    assert pattern == path
-    pattern.vars.should be(%w( foo bar baz xml ))
+    assert { pattern == path }
+    pattern.vars.must == %w( foo bar baz xml )
   end
 
-  test "variable pattern matches a path with static extension" do
+  # variable pattern matches a path with static extension 
+  test do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar.xml')
 
-    assert pattern == path
+    assert { pattern == path }
   end
 
-  test "variable pattern matches a path with variable extension" do
+  # variable pattern matches a path with variable extension 
+  test do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar.:type')
 
-    assert pattern == path
+    assert { pattern == path }
   end
 
-  test "pattern without extension doesn't match path with extension" do
+  # pattern without extension doesn't match path with extension 
+  test do
     path    = Path.new('/foo/bar.xml')
     pattern = Pattern.new('/:foo/:bar')
 
-    assert pattern != path
+    assert { pattern != path }
   end
 
-  test "pattern with static extension doesn't match path without extension" do
+  # pattern with static extension doesn't match path without extension 
+  test do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/:foo/:bar.xml')
 
-    assert pattern != path
+    assert { pattern != path }
   end
 
-  test "pattern with variable extension doesn't match path without extension" do
+  # pattern with variable extension doesn't match path without extension 
+  test do
     path    = Path.new('/foo/bar')
     pattern = Pattern.new('/:foo/:bar.:type')
 
-    assert pattern != path
+    assert { pattern != path }
   end
 
-  test "doesn't ignore dots in path parts" do
+  # doesn't ignore dots in path parts 
+  test do
     path    = Path.new('/foo/bar.baz/abc')
     pattern = Pattern.new('/:a/:b/:c')
 
-    assert pattern == path
-    pattern.variables.should be(%w( foo bar.baz abc ))
+    assert { pattern == path }
+    pattern.variables.must == %w( foo bar.baz abc )
   end
 
-  test "doesn't get confused with extension when path contains other dots" do
+  # doesn't get confused with extension when path contains other dots 
+  test do
     path    = Path.new('/foo/bar.baz/abc.xml')
     pattern = Pattern.new('/:a/:b/:c.:type')
 
-    assert pattern == path
-    pattern.variables.should be(%w( foo bar.baz abc xml ))
+    assert { pattern == path }
+    pattern.variables.must == %w( foo bar.baz abc xml )
   end
 end

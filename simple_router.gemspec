@@ -13,5 +13,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rack'
   s.add_development_dependency 'nanotest'
+  s.add_development_dependency 'nanotest_extensions'
 end
 

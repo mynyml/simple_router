@@ -4,20 +4,22 @@ class App
   include SimpleRouter::DSL
 end
 
-class SimpleRouterTest < Test::Unit::TestCase
+context do
 
-  def setup
+  setup do
     SimpleRouter.engine = nil
   end
 
   ## engine
 
-  test "default engine" do
-    SimpleRouter.engine.name.split('::').last.should be('SimpleEngine')
+  # default engine
+  test do
+    SimpleRouter.engine.name.split('::').last.must == 'SimpleEngine'
   end
 
-  test "custom engine" do
+  # custom engine
+  test do
     SimpleRouter.engine = ::Object
-    SimpleRouter.engine.name.should be('Object')
+    SimpleRouter.engine.name.must == 'Object'
   end
 end

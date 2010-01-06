@@ -1,56 +1,63 @@
 require 'test/test_helper'
 
-Routes = SimpleRouter::Routes
+## Routes
+context do
+  Routes = SimpleRouter::Routes
 
-class RoutesTest < Test::Unit::TestCase
-
-  def setup
+  setup do
     @routes = Routes.new
     @action = lambda {}
   end
 
-  test "stores route definitions" do
+  # stores route definitions 
+  test do
     @routes.add(:get, '/foo', {}, &@action)
-    @routes.first.path.should be('/foo')
+    @routes.first.path.must == '/foo'
   end
 
   ## matching
 
-  test "matches a path" do
+  # matches a path 
+  test do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match(:get, '/bar').should_not  be(nil)
-    @routes.match(:get, '/bar').path.should be('/bar')
+    @routes.match(:get, '/bar').wont == nil
+    @routes.match(:get, '/bar').path.must == '/bar'
   end
 
-  test "returns nil when no route matches" do
+  # returns nil when no route matches 
+  test do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match('/baz', :get).should be(nil)
+    @routes.match('/baz', :get).must == nil
   end
 
-  test "normalizes passed in verb string" do
+  # normalizes passed in verb string 
+  test do
     @routes.add(:get, '/foo', {}, &@action)
     @routes.add(:get, '/bar', {}, &@action)
 
-    @routes.match('get',  '/bar').path.should be('/bar')
-    @routes.match('GET',  '/bar').path.should be('/bar')
-    @routes.match(' GET ','/bar').path.should be('/bar')
+    @routes.match('get',  '/bar').path.must == '/bar'
+    @routes.match('GET',  '/bar').path.must == '/bar'
+    @routes.match(' GET ','/bar').path.must == '/bar'
   end
 end
 
-class RouteTest < Test::Unit::TestCase
+## Route
+context do
 
-  test "internal API" do
+  # internal API 
+  test do
     verb, path, options, action = :get, '/foo', {}, lambda {}
 
     route = SimpleRouter::Routes::Route.new(verb, path, options, &action)
-    route.verb    .should be(verb)
-    route.path    .should be(path)
-    route.options .should be(options)
-    route.action  .should be(action)
-    route.values  .should be(nil)
+    route.verb    .must == verb
+    route.path    .must == path
+    route.options .must == options
+    route.action  .must == action
+    route.values  .must == nil
   end
 end
+
