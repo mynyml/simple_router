@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name                = 'simple_router'
-  s.version             = "0.9.8.1"
+  s.version             = "0.9.8.2"
   s.summary             = "Simple, minimalistic, standalone router meant to be used with pure rack applications"
   s.description         = "Simple, minimalistic, standalone router meant to be used with pure rack applications."
   s.author              = "mynyml"
