@@ -41,12 +41,12 @@ The SimpleRouter::DSL mixin provides 5 class methods:
 The four verb methods allow you to define actions that will match a request for
 the verb and route signature it defines.
 
-The #routes method responds to #match and will return the first matching route
-(in order they were defined), and the values of the variables defined in the
-route signature if any (:year, :month, ...).
+The `#routes` method responds to `#match` and will return the first matching
+route (in order they were defined), and the values of the variables defined in
+the route signature if any (`:year`, `:month`, ...).
 
 Finally, the route returned is a simple object: for the second route in the
-example above:
+example above, you get:
 
     route.verb    #=> :get
     route.path    #=> '/archives/:year/:month/:day'
@@ -71,7 +71,7 @@ changes in the top level DSL.
 
 Engines can also allow route definitions to include more (or less!) features.
 For example, the built-in SimpleEngine allows route variables and extension
-handling. Others could add variable conditions `( :id => Integer )`, mime-type
+handling. Others could add variable conditions (`:id => Integer`), mime-type
 restrictions, etc.
 
 #### Engine Writers
