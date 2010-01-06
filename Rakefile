@@ -1,66 +1,30 @@
+def gem_opt
+  defined?(Gem) ? "-rubygems" : ""
+end
+
+def ruby(path)
+  path = "-e'%w( #{path.join(' ')} ).each {|p| require p }'" if path.is_a?(Array)
+  system "ruby #{gem_opt} -I.:lib:test #{path}"
+end
+
 # --------------------------------------------------
-# based on thin's Rakefile (http://github.com/macournoyer/thin)
+# Tests
 # --------------------------------------------------
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'pathname'
-require 'yaml'
+task(:default => :test)
 
-RUBY_1_9  = RUBY_VERSION =~ /^1\.9/
-WIN       = (RUBY_PLATFORM =~ /mswin|cygwin/)
-SUDO      = (WIN ? "" : "sudo")
-
-def gem
-  RUBY_1_9 ? 'gem19' : 'gem'
+desc "Run tests"
+task(:test) do
+  exit ruby( Dir['test/**/test_*.rb'] - ['test/test_helper.rb'] )
 end
 
-def all_except(res)
-  Dir['**/*'].reject do |path|
-    Array(res).any? {|re| path.match(re) }
-  end
+# --------------------------------------------------
+# Docs
+# --------------------------------------------------
+desc "Generate YARD Documentation"
+task(:yardoc) do
+  require 'yard'
+  files   = %w( lib/**/*.rb )
+  options = %w( -o doc/yard --readme README --files LICENSE )
+  YARD::CLI::Yardoc.run *(options + files)
 end
 
-spec = Gem::Specification.new do |s|
-  s.name            = 'simple_router'
-  s.version         = '0.9'
-  s.summary         = "Simple, minimalistic, standalone router meant to be used with pure rack applications."
-  s.description     = "Simple, minimalistic, standalone router meant to be used with pure rack applications."
-  s.author          = "Martin Aumont"
-  s.email           = 'mynyml@gmail.com'
-  s.homepage        = ''
-  s.has_rdoc        = true
-  s.require_path    = "lib"
-  s.files           = all_except([/doc\/.*/, /pkg\/*/])
-end
-
-Rake::GemPackageTask.new(spec) do |p|
-  p.gem_spec = spec
-end
-
-desc "Remove package products"
-task :clean => :clobber_package
-
-desc "Update the gemspec for GitHub's gem server"
-task :gemspec do
-  Pathname("#{spec.name}.gemspec").open('w') {|f| f << YAML.dump(spec) }
-end
-
-desc "Install gem"
-task :install => [:clobber, :package] do
-  sh "#{SUDO} #{gem} install pkg/#{spec.full_name}.gem"
-end
-
-desc "Uninstall gem"
-task :uninstall => :clean do
-  sh "#{SUDO} #{gem} uninstall -v #{spec.version} -x #{spec.name}"
-end
-
-desc "Generate rdoc documentation."
-Rake::RDocTask.new("rdoc") { |rdoc|
-  rdoc.rdoc_dir = 'doc/rdoc'
-  rdoc.title    = "Simple Router - Document"
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.options << '--charset' << 'utf-8'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-}
