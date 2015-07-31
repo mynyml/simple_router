@@ -16,9 +16,9 @@ module SimpleRouter
       path, values = SimpleRouter.engine.match(path, paths)
       return nil if path.nil?
 
-      route = routes.detect {|route| route.path == path }
-      route.values = values
-      route
+      final_route = routes.detect {|route| route.path == path }
+      final_route.values = values
+      final_route
     end
 
     class Route
