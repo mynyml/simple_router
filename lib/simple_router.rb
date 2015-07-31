@@ -1,7 +1,7 @@
 module SimpleRouter
   class << self
     attr_accessor :engine
-    def engine() @engine || Engines::SimpleEngine end
+    def engine() super || Engines::SimpleEngine end
   end
 
   autoload :DSL,    'simple_router/dsl'
